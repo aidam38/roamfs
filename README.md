@@ -20,4 +20,4 @@ document.getElementsByTagName("head")[0].appendChild(s);
 
 ...and allow the script.
 
-Right click 
+Right click the gray area where the line numbers are of a code block, pick a file, and the file will get synced with that code block whenever you focus your browser.
