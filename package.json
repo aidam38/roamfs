@@ -2,15 +2,14 @@
   "name": "roam-filesystem-sync",
   "version": "1.0.0",
   "description": "Roam Filesystem Sync",
-  "main": "index.ts",
   "author": "Adam Krivka",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel src/index.ts -o dist/filesystem-sync.js"
+    "dev": "parcel serve src/index.ts"
   },
   "devDependencies": {
     "@types/store": "^2.0.2",
-    "parcel": "^2.0.0-beta.1",
+    "parcel": "^2.0.0-rc.0",
     "typescript": "^4.2.3"
   }
 }

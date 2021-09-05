@@ -21,41 +21,31 @@ const readBlock = async (uid) => {
     } else return ""
 }
 
-const getUid = (target) => {
-    return target.closest(".roam-block").id.slice(-9);
-};
-
 const replaceCodeblockContent = (orig, content) => {
     return orig.replace(/(?<=```)(\w+).*(?=```)/gms, "$1\n" + content)
 }
 
-export const rightClickCallback = async (e, syncs) => {
-    e.preventDefault();
-    if (e.target.classList.contains("CodeMirror-gutter-elt")) {
-        const uid = getUid(e.target);
-        const orig = await readBlock(uid);
-        const file = await openFileFromSystem();
-        //@ts-ignore
-        syncs.push({
-            uid: uid,
-            orig: orig,
-            file: file,
-        })
-    }
+export const connectToFile = async (e, syncs) => {
+    const uid = e['block-uid']
+    const orig = await readBlock(uid);
+    const file = await openFileFromSystem();
+    //@ts-ignore
+    syncs.push({
+        uid: uid,
+        orig: orig,
+        file: file,
+    })
 }
-
 export const focusCallback = async (syncs) => {
-    console.log("focus")
-    syncs = await Promise.all(syncs.map(async (sync) => {
+    var updates = await Promise.all(syncs.map(async (sync) => {
         const content = await readFile(sync.file);
         return {
             uid: sync.uid,
             content: replaceCodeblockContent(sync.orig, content)
         }
     }))
-    syncs.forEach(sync => {
-        console.log("Updating block: " + sync.uid + " with " + sync.content);
-
+    updates.forEach(sync => {
+        //@ts-ignore
         updateBlock(sync.uid, sync.content)
     });
 }

@@ -5,10 +5,32 @@
 //
 // anything defined in a previous bundle is accessed via the
 // orig method which is the require for previous bundles
-parcelRequire = (function (modules, cache, entry, globalName) {
+
+(function(modules, entry, mainEntry, parcelRequireName, globalName) {
+  /* eslint-disable no-undef */
+  var globalObject =
+    typeof globalThis !== 'undefined'
+      ? globalThis
+      : typeof self !== 'undefined'
+      ? self
+      : typeof window !== 'undefined'
+      ? window
+      : typeof global !== 'undefined'
+      ? global
+      : {};
+  /* eslint-enable no-undef */
+
   // Save the require from previous bundle to this closure if any
-  var previousRequire = typeof parcelRequire === 'function' && parcelRequire;
-  var nodeRequire = typeof require === 'function' && require;
+  var previousRequire =
+    typeof globalObject[parcelRequireName] === 'function' &&
+    globalObject[parcelRequireName];
+
+  var cache = previousRequire.cache || {};
+  // Do not use `require` to prevent Webpack from trying to bundle this call
+  var nodeRequire =
+    typeof module !== 'undefined' &&
+    typeof module.require === 'function' &&
+    module.require.bind(module);
 
   function newRequire(name, jumped) {
     if (!cache[name]) {
@@ -16,7 +38,9 @@ parcelRequire = (function (modules, cache, entry, globalName) {
         // if we cannot find the module within our internal map or
         // cache jump to the current global require ie. the last bundle
         // that was added to the page.
-        var currentRequire = typeof parcelRequire === 'function' && parcelRequire;
+        var currentRequire =
+          typeof globalObject[parcelRequireName] === 'function' &&
+          globalObject[parcelRequireName];
         if (!jumped && currentRequire) {
           return currentRequire(name, true);
         }
@@ -34,7 +58,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
           return nodeRequire(name);
         }
 
-        var err = new Error('Cannot find module \'' + name + '\'');
+        var err = new Error("Cannot find module '" + name + "'");
         err.code = 'MODULE_NOT_FOUND';
         throw err;
       }
@@ -42,18 +66,24 @@ parcelRequire = (function (modules, cache, entry, globalName) {
       localRequire.resolve = resolve;
       localRequire.cache = {};
 
-      var module = cache[name] = new newRequire.Module(name);
+      var module = (cache[name] = new newRequire.Module(name));
 
-      modules[name][0].call(module.exports, localRequire, module, module.exports, this);
+      modules[name][0].call(
+        module.exports,
+        localRequire,
+        module,
+        module.exports,
+        this
+      );
     }
 
     return cache[name].exports;
 
-    function localRequire(x){
+    function localRequire(x) {
       return newRequire(localRequire.resolve(x));
     }
 
-    function resolve(x){
+    function resolve(x) {
       return modules[name][1][x] || x;
     }
   }
@@ -69,961 +99,551 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   newRequire.modules = modules;
   newRequire.cache = cache;
   newRequire.parent = previousRequire;
-  newRequire.register = function (id, exports) {
-    modules[id] = [function (require, module) {
-      module.exports = exports;
-    }, {}];
+  newRequire.register = function(id, exports) {
+    modules[id] = [
+      function(require, module) {
+        module.exports = exports;
+      },
+      {},
+    ];
   };
 
-  var error;
+  Object.defineProperty(newRequire, 'root', {
+    get: function() {
+      return globalObject[parcelRequireName];
+    },
+  });
+
+  globalObject[parcelRequireName] = newRequire;
+
   for (var i = 0; i < entry.length; i++) {
-    try {
-      newRequire(entry[i]);
-    } catch (e) {
-      // Save first error but execute all entries
-      if (!error) {
-        error = e;
-      }
-    }
+    newRequire(entry[i]);
   }
 
-  if (entry.length) {
+  if (mainEntry) {
     // Expose entry point to Node, AMD or browser globals
     // Based on https://github.com/ForbesLindesay/umd/blob/master/template.js
-    var mainExports = newRequire(entry[entry.length - 1]);
+    var mainExports = newRequire(mainEntry);
 
     // CommonJS
-    if (typeof exports === "object" && typeof module !== "undefined") {
+    if (typeof exports === 'object' && typeof module !== 'undefined') {
       module.exports = mainExports;
 
-    // RequireJS
-    } else if (typeof define === "function" && define.amd) {
-     define(function () {
-       return mainExports;
-     });
+      // RequireJS
+    } else if (typeof define === 'function' && define.amd) {
+      define(function() {
+        return mainExports;
+      });
 
-    // <script>
+      // <script>
     } else if (globalName) {
       this[globalName] = mainExports;
     }
   }
-
-  // Override the current require with this new one
-  parcelRequire = newRequire;
-
-  if (error) {
-    // throw error from earlier, _after updating parcelRequire_
-    throw error;
-  }
-
-  return newRequire;
-})({"filesystem.ts":[function(require,module,exports) {
+})({"8uBhv":[function(require,module,exports) {
+var HMR_HOST = null;
+var HMR_PORT = null;
+var HMR_SECURE = false;
+var HMR_ENV_HASH = "69f74e7f31319ffd";
+module.bundle.HMR_BUNDLE_ID = "0b7c8afcb31310b1";
 "use strict";
-
-var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
-  function adopt(value) {
-    return value instanceof P ? value : new P(function (resolve) {
-      resolve(value);
-    });
-  }
-
-  return new (P || (P = Promise))(function (resolve, reject) {
-    function fulfilled(value) {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-
-    function rejected(value) {
-      try {
-        step(generator["throw"](value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-
-    function step(result) {
-      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-    }
-
-    step((generator = generator.apply(thisArg, _arguments || [])).next());
-  });
-};
-
-var __generator = this && this.__generator || function (thisArg, body) {
-  var _ = {
-    label: 0,
-    sent: function sent() {
-      if (t[0] & 1) throw t[1];
-      return t[1];
-    },
-    trys: [],
-    ops: []
-  },
-      f,
-      y,
-      t,
-      g;
-  return g = {
-    next: verb(0),
-    "throw": verb(1),
-    "return": verb(2)
-  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
-    return this;
-  }), g;
-
-  function verb(n) {
-    return function (v) {
-      return step([n, v]);
-    };
-  }
-
-  function step(op) {
-    if (f) throw new TypeError("Generator is already executing.");
-
-    while (_) {
-      try {
-        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-        if (y = 0, t) op = [op[0] & 2, t.value];
-
-        switch (op[0]) {
-          case 0:
-          case 1:
-            t = op;
-            break;
-
-          case 4:
-            _.label++;
-            return {
-              value: op[1],
-              done: false
+function _createForOfIteratorHelper(o, allowArrayLike) {
+    var it;
+    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+        if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+            if (it) o = it;
+            var i = 0;
+            var F = function F1() {
             };
-
-          case 5:
-            _.label++;
-            y = op[1];
-            op = [0];
-            continue;
-
-          case 7:
-            op = _.ops.pop();
-
-            _.trys.pop();
-
-            continue;
-
-          default:
-            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-              _ = 0;
-              continue;
-            }
-
-            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-              _.label = op[1];
-              break;
-            }
-
-            if (op[0] === 6 && _.label < t[1]) {
-              _.label = t[1];
-              t = op;
-              break;
-            }
-
-            if (t && _.label < t[2]) {
-              _.label = t[2];
-
-              _.ops.push(op);
-
-              break;
-            }
-
-            if (t[2]) _.ops.pop();
-
-            _.trys.pop();
-
-            continue;
+            return {
+                s: F,
+                n: function n() {
+                    if (i >= o.length) return {
+                        done: true
+                    };
+                    return {
+                        done: false,
+                        value: o[i++]
+                    };
+                },
+                e: function e(_e) {
+                    throw _e;
+                },
+                f: F
+            };
         }
-
-        op = body.call(thisArg, _);
-      } catch (e) {
-        op = [6, e];
-        y = 0;
-      } finally {
-        f = t = 0;
-      }
+        throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
-
-    if (op[0] & 5) throw op[1];
+    var normalCompletion = true, didErr = false, err;
     return {
-      value: op[0] ? op[1] : void 0,
-      done: true
+        s: function s() {
+            it = o[Symbol.iterator]();
+        },
+        n: function n() {
+            var step = it.next();
+            normalCompletion = step.done;
+            return step;
+        },
+        e: function e(_e2) {
+            didErr = true;
+            err = _e2;
+        },
+        f: function f() {
+            try {
+                if (!normalCompletion && it.return != null) it.return();
+            } finally{
+                if (didErr) throw err;
+            }
+        }
     };
-  }
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.readFile = exports.saveFileToSystem = exports.getFileFromHandle = exports.openFileFromSystem = void 0;
-
-var openFileFromSystem = function openFileFromSystem() {
-  return __awaiter(void 0, void 0, Promise, function () {
-    var handle;
-    return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          return [4
-          /*yield*/
-          , window.showOpenFilePicker({
-            types: [{
-              description: 'Local file'
-            }]
-          })];
-
-        case 1:
-          handle = _a.sent()[0];
-          return [4
-          /*yield*/
-          , exports.getFileFromHandle(handle)];
-
-        case 2:
-          return [2
-          /*return*/
-          , _a.sent()];
-      }
+}
+function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
+    return arr2;
+}
+/* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE */ /*::
+import type {
+  HMRAsset,
+  HMRMessage,
+} from '@parcel/reporter-dev-server/src/HMRServer.js';
+interface ParcelRequire {
+  (string): mixed;
+  cache: {|[string]: ParcelModule|};
+  hotData: mixed;
+  Module: any;
+  parent: ?ParcelRequire;
+  isParcelRequire: true;
+  modules: {|[string]: [Function, {|[string]: string|}]|};
+  HMR_BUNDLE_ID: string;
+  root: ParcelRequire;
+}
+interface ParcelModule {
+  hot: {|
+    data: mixed,
+    accept(cb: (Function) => void): void,
+    dispose(cb: (mixed) => void): void,
+    // accept(deps: Array<string> | string, cb: (Function) => void): void,
+    // decline(): void,
+    _acceptCallbacks: Array<(Function) => void>,
+    _disposeCallbacks: Array<(mixed) => void>,
+  |};
+}
+declare var module: {bundle: ParcelRequire, ...};
+declare var HMR_HOST: string;
+declare var HMR_PORT: string;
+declare var HMR_ENV_HASH: string;
+declare var HMR_SECURE: boolean;
+*/ var OVERLAY_ID = '__parcel__error__overlay__';
+var OldModule = module.bundle.Module;
+function Module(moduleName) {
+    OldModule.call(this, moduleName);
+    this.hot = {
+        data: module.bundle.hotData,
+        _acceptCallbacks: [],
+        _disposeCallbacks: [],
+        accept: function accept(fn) {
+            this._acceptCallbacks.push(fn || function() {
+            });
+        },
+        dispose: function dispose(fn) {
+            this._disposeCallbacks.push(fn);
+        }
+    };
+    module.bundle.hotData = undefined;
+}
+module.bundle.Module = Module;
+var checkedAssets, acceptedAssets, assetsToAccept;
+function getHostname() {
+    return HMR_HOST || (location.protocol.indexOf('http') === 0 ? location.hostname : 'localhost');
+}
+function getPort() {
+    return HMR_PORT || location.port;
+} // eslint-disable-next-line no-redeclare
+var parent = module.bundle.parent;
+if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
+    var hostname = getHostname();
+    var port = getPort();
+    var protocol = HMR_SECURE || location.protocol == 'https:' && !/localhost|127.0.0.1|0.0.0.0/.test(hostname) ? 'wss' : 'ws';
+    var ws = new WebSocket(protocol + '://' + hostname + (port ? ':' + port : '') + '/'); // $FlowFixMe
+    ws.onmessage = function(event) {
+        checkedAssets = {
+        };
+        acceptedAssets = {
+        };
+        assetsToAccept = [];
+        var data = JSON.parse(event.data);
+        if (data.type === 'update') {
+            // Remove error overlay if there is one
+            removeErrorOverlay();
+            var assets = data.assets.filter(function(asset) {
+                return asset.envHash === HMR_ENV_HASH;
+            }); // Handle HMR Update
+            var handled = assets.every(function(asset) {
+                return asset.type === 'css' || asset.type === 'js' && hmrAcceptCheck(module.bundle.root, asset.id, asset.depsByBundle);
+            });
+            if (handled) {
+                console.clear();
+                assets.forEach(function(asset) {
+                    hmrApply(module.bundle.root, asset);
+                });
+                for(var i = 0; i < assetsToAccept.length; i++){
+                    var id = assetsToAccept[i][1];
+                    if (!acceptedAssets[id]) hmrAcceptRun(assetsToAccept[i][0], id);
+                }
+            } else window.location.reload();
+        }
+        if (data.type === 'error') {
+            // Log parcel errors to console
+            var _iterator = _createForOfIteratorHelper(data.diagnostics.ansi), _step;
+            try {
+                for(_iterator.s(); !(_step = _iterator.n()).done;){
+                    var ansiDiagnostic = _step.value;
+                    var stack = ansiDiagnostic.codeframe ? ansiDiagnostic.codeframe : ansiDiagnostic.stack;
+                    console.error('🚨 [parcel]: ' + ansiDiagnostic.message + '\n' + stack + '\n\n' + ansiDiagnostic.hints.join('\n'));
+                } // Render the fancy html overlay
+            } catch (err) {
+                _iterator.e(err);
+            } finally{
+                _iterator.f();
+            }
+            removeErrorOverlay();
+            var overlay = createErrorOverlay(data.diagnostics.html); // $FlowFixMe
+            document.body.appendChild(overlay);
+        }
+    };
+    ws.onerror = function(e) {
+        console.error(e.message);
+    };
+    ws.onclose = function() {
+        console.warn('[parcel] 🚨 Connection to the HMR server was lost');
+    };
+}
+function removeErrorOverlay() {
+    var overlay = document.getElementById(OVERLAY_ID);
+    if (overlay) {
+        overlay.remove();
+        console.log('[parcel] ✨ Error resolved');
+    }
+}
+function createErrorOverlay(diagnostics) {
+    var overlay = document.createElement('div');
+    overlay.id = OVERLAY_ID;
+    var errorHTML = '<div style="background: black; opacity: 0.85; font-size: 16px; color: white; position: fixed; height: 100%; width: 100%; top: 0px; left: 0px; padding: 30px; font-family: Menlo, Consolas, monospace; z-index: 9999;">';
+    var _iterator2 = _createForOfIteratorHelper(diagnostics), _step2;
+    try {
+        for(_iterator2.s(); !(_step2 = _iterator2.n()).done;){
+            var diagnostic = _step2.value;
+            var stack = diagnostic.codeframe ? diagnostic.codeframe : diagnostic.stack;
+            errorHTML += "\n      <div>\n        <div style=\"font-size: 18px; font-weight: bold; margin-top: 20px;\">\n          \uD83D\uDEA8 ".concat(diagnostic.message, "\n        </div>\n        <pre>\n          ").concat(stack, "\n        </pre>\n        <div>\n          ").concat(diagnostic.hints.map(function(hint) {
+                return '<div>' + hint + '</div>';
+            }).join(''), "\n        </div>\n      </div>\n    ");
+        }
+    } catch (err) {
+        _iterator2.e(err);
+    } finally{
+        _iterator2.f();
+    }
+    errorHTML += '</div>';
+    overlay.innerHTML = errorHTML;
+    return overlay;
+}
+function getParents(bundle, id) /*: Array<[ParcelRequire, string]> */ {
+    var modules = bundle.modules;
+    if (!modules) return [];
+    var parents = [];
+    var k, d, dep;
+    for(k in modules)for(d in modules[k][1]){
+        dep = modules[k][1][d];
+        if (dep === id || Array.isArray(dep) && dep[dep.length - 1] === id) parents.push([
+            bundle,
+            k
+        ]);
+    }
+    if (bundle.parent) parents = parents.concat(getParents(bundle.parent, id));
+    return parents;
+}
+function updateLink(link) {
+    var newLink = link.cloneNode();
+    newLink.onload = function() {
+        if (link.parentNode !== null) // $FlowFixMe
+        link.parentNode.removeChild(link);
+    };
+    newLink.setAttribute('href', link.getAttribute('href').split('?')[0] + '?' + Date.now()); // $FlowFixMe
+    link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+var cssTimeout = null;
+function reloadCSS() {
+    if (cssTimeout) return;
+    cssTimeout = setTimeout(function() {
+        var links = document.querySelectorAll('link[rel="stylesheet"]');
+        for(var i = 0; i < links.length; i++){
+            // $FlowFixMe[incompatible-type]
+            var href = links[i].getAttribute('href');
+            var hostname = getHostname();
+            var servedFromHMRServer = hostname === 'localhost' ? new RegExp('^(https?:\\/\\/(0.0.0.0|127.0.0.1)|localhost):' + getPort()).test(href) : href.indexOf(hostname + ':' + getPort());
+            var absolute = /^https?:\/\//i.test(href) && href.indexOf(window.location.origin) !== 0 && !servedFromHMRServer;
+            if (!absolute) updateLink(links[i]);
+        }
+        cssTimeout = null;
+    }, 50);
+}
+function hmrApply(bundle, asset) {
+    var modules = bundle.modules;
+    if (!modules) return;
+    if (asset.type === 'css') {
+        reloadCSS();
+        return;
+    }
+    var deps = asset.depsByBundle[bundle.HMR_BUNDLE_ID];
+    if (deps) {
+        var fn = new Function('require', 'module', 'exports', asset.output);
+        modules[asset.id] = [
+            fn,
+            deps
+        ];
+    } else if (bundle.parent) hmrApply(bundle.parent, asset);
+}
+function hmrAcceptCheck(bundle, id, depsByBundle) {
+    var modules = bundle.modules;
+    if (!modules) return;
+    if (depsByBundle && !depsByBundle[bundle.HMR_BUNDLE_ID]) {
+        // If we reached the root bundle without finding where the asset should go,
+        // there's nothing to do. Mark as "accepted" so we don't reload the page.
+        if (!bundle.parent) return true;
+        return hmrAcceptCheck(bundle.parent, id, depsByBundle);
+    }
+    if (checkedAssets[id]) return;
+    checkedAssets[id] = true;
+    var cached = bundle.cache[id];
+    assetsToAccept.push([
+        bundle,
+        id
+    ]);
+    if (cached && cached.hot && cached.hot._acceptCallbacks.length) return true;
+    return getParents(module.bundle.root, id).some(function(v) {
+        return hmrAcceptCheck(v[0], v[1], null);
     });
-  });
+}
+function hmrAcceptRun(bundle, id) {
+    var cached = bundle.cache[id];
+    bundle.hotData = {
+    };
+    if (cached && cached.hot) cached.hot.data = bundle.hotData;
+    if (cached && cached.hot && cached.hot._disposeCallbacks.length) cached.hot._disposeCallbacks.forEach(function(cb) {
+        cb(bundle.hotData);
+    });
+    delete bundle.cache[id];
+    bundle(id);
+    cached = bundle.cache[id];
+    if (cached && cached.hot && cached.hot._acceptCallbacks.length) cached.hot._acceptCallbacks.forEach(function(cb) {
+        var assetsToAlsoAccept = cb(function() {
+            return getParents(module.bundle.root, id);
+        });
+        if (assetsToAlsoAccept && assetsToAccept.length) // $FlowFixMe[method-unbinding]
+        assetsToAccept.push.apply(assetsToAccept, assetsToAlsoAccept);
+    });
+    acceptedAssets[id] = true;
+}
+
+},{}],"4aleK":[function(require,module,exports) {
+//@ts-nocheck
+var _ui = require("./ui");
+// Adding god object
+window.roamfs = {
+};
+window.roamfs.syncs = [];
+// Adding block context menu entry
+roamAlphaAPI.ui.blockContextMenu.addCommand({
+    label: "Roam FS: Connect to a local file",
+    'display-conditional': (e)=>e['block-string'].includes("```")
+    ,
+    callback: (e)=>{
+        _ui.connectToFile(e, window.roamfs.syncs);
+    }
+});
+// Adding focus listentrk
+window.addEventListener("focus", ()=>{
+    _ui.focusCallback(window.roamfs.syncs);
+});
+
+},{"./ui":"gZ4sI"}],"gZ4sI":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "connectToFile", ()=>connectToFile
+);
+parcelHelpers.export(exports, "focusCallback", ()=>focusCallback
+);
+var _filesystem = require("./filesystem");
+// Helpers
+const updateBlock = async (uid, string)=>{
+    //@ts-ignore
+    await window.roamAlphaAPI.updateBlock({
+        block: {
+            uid: uid,
+            string: string
+        }
+    });
+};
+const readBlock = async (uid)=>{
+    //@ts-ignore
+    const results = await window.roamAlphaAPI.q(`[:find\n    (pull ?block [:block/string])\n    :where [?block :block/uid "${uid}"]]`);
+    if (results && results.length !== 0) return results[0][0].string;
+    else return "";
+};
+const replaceCodeblockContent = (orig, content)=>{
+    return orig.replace(/(?<=```)(\w+).*(?=```)/gms, "$1\n" + content);
+};
+const connectToFile = async (e, syncs)=>{
+    const uid = e['block-uid'];
+    const orig = await readBlock(uid);
+    const file = await _filesystem.openFileFromSystem();
+    //@ts-ignore
+    syncs.push({
+        uid: uid,
+        orig: orig,
+        file: file
+    });
+};
+const focusCallback = async (syncs)=>{
+    var updates = await Promise.all(syncs.map(async (sync)=>{
+        const content = await _filesystem.readFile(sync.file);
+        return {
+            uid: sync.uid,
+            content: replaceCodeblockContent(sync.orig, content)
+        };
+    }));
+    updates.forEach((sync)=>{
+        //@ts-ignore
+        updateBlock(sync.uid, sync.content);
+    });
 };
 
-exports.openFileFromSystem = openFileFromSystem;
-
-var getFileFromHandle = function getFileFromHandle(fileHandle) {
-  return __awaiter(void 0, void 0, Promise, function () {
-    var verify, file, content, e_1;
-    return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          return [4
-          /*yield*/
-          , verifyPermission(fileHandle, false)];
-
-        case 1:
-          verify = _a.sent();
-
-          if (!verify) {
-            alert('Permission denied');
-            return [2
-            /*return*/
-            ];
-          }
-
-          _a.label = 2;
-
-        case 2:
-          _a.trys.push([2, 5,, 6]);
-
-          return [4
-          /*yield*/
-          , fileHandle.getFile()];
-
-        case 3:
-          file = _a.sent();
-          return [4
-          /*yield*/
-          , file.text()];
-
-        case 4:
-          content = _a.sent();
-          return [2
-          /*return*/
-          , {
+},{"./filesystem":"HCCWh","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"HCCWh":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "openFileFromSystem", ()=>openFileFromSystem
+);
+parcelHelpers.export(exports, "getFileFromHandle", ()=>getFileFromHandle
+);
+parcelHelpers.export(exports, "saveFileToSystem", ()=>saveFileToSystem
+);
+parcelHelpers.export(exports, "readFile", ()=>readFile
+);
+const openFileFromSystem = async ()=>{
+    // @ts-ignore
+    const [handle] = await window.showOpenFilePicker({
+        types: [
+            {
+                description: 'Local file'
+            }, 
+        ]
+    });
+    return await getFileFromHandle(handle);
+};
+const getFileFromHandle = async (fileHandle)=>{
+    const verify = await verifyPermission(fileHandle, false);
+    if (!verify) {
+        alert('Permission denied');
+        return;
+    }
+    try {
+        const file = await fileHandle.getFile();
+        const content = await file.text();
+        return {
             title: file.name,
-            content: content,
+            content,
             savedContent: content,
             handle: fileHandle,
             handleLoaded: true
-          }];
-
-        case 5:
-          e_1 = _a.sent();
-          alert('The file could not be read. Please make sure that it still exists.');
-          return [2
-          /*return*/
-          ];
-
-        case 6:
-          return [2
-          /*return*/
-          ];
-      }
-    });
-  });
-};
-
-exports.getFileFromHandle = getFileFromHandle;
-
-var saveFileToSystem = function saveFileToSystem(toSave) {
-  return __awaiter(void 0, void 0, Promise, function () {
-    var handle, writable, file;
-    return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          handle = toSave.handle;
-          if (!!handle) return [3
-          /*break*/
-          , 2];
-          return [4
-          /*yield*/
-          , window.showSaveFilePicker({
-            types: [{
-              description: 'Markdown Files',
-              accept: {
-                'text/markdown': ['.md']
-              }
-            }]
-          })];
-
-        case 1:
-          // if no handle exists it must be a new file. So we create a new handle
-          // @ts-ignore
-          handle = _a.sent();
-          _a.label = 2;
-
-        case 2:
-          return [4
-          /*yield*/
-          , handle.createWritable()];
-
-        case 3:
-          writable = _a.sent();
-          return [4
-          /*yield*/
-          , writable.write(toSave.content)];
-
-        case 4:
-          _a.sent();
-
-          return [4
-          /*yield*/
-          , handle.getFile()];
-
-        case 5:
-          file = _a.sent();
-          return [4
-          /*yield*/
-          , writable.close()];
-
-        case 6:
-          _a.sent();
-
-          return [2
-          /*return*/
-          , {
-            title: file.name,
-            savedContent: toSave.content,
-            handle: handle
-          }];
-      }
-    });
-  });
-};
-
-exports.saveFileToSystem = saveFileToSystem;
-
-function verifyPermission(fileHandle, withWrite) {
-  return __awaiter(this, void 0, void 0, function () {
-    var opts, permission, request;
-    return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          opts = withWrite ? {
-            writable: true,
-            mode: 'readwrite'
-          } : {};
-          return [4
-          /*yield*/
-          , fileHandle.queryPermission(opts)];
-
-        case 1:
-          permission = _a.sent();
-
-          if (permission === 'granted') {
-            return [2
-            /*return*/
-            , true];
-          }
-
-          return [4
-          /*yield*/
-          , fileHandle.requestPermission(opts)];
-
-        case 2:
-          request = _a.sent();
-          return [2
-          /*return*/
-          , request === 'granted'];
-      }
-    });
-  });
-}
-
-var readFile = function readFile(file) {
-  return __awaiter(void 0, void 0, void 0, function () {
-    var newfile;
-    return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          return [4
-          /*yield*/
-          , file.handle.getFile()];
-
-        case 1:
-          newfile = _a.sent();
-          return [4
-          /*yield*/
-          , newfile.text()];
-
-        case 2:
-          return [2
-          /*return*/
-          , _a.sent()];
-      }
-    });
-  });
-};
-
-exports.readFile = readFile;
-},{}],"ui.ts":[function(require,module,exports) {
-"use strict";
-
-var __awaiter = this && this.__awaiter || function (thisArg, _arguments, P, generator) {
-  function adopt(value) {
-    return value instanceof P ? value : new P(function (resolve) {
-      resolve(value);
-    });
-  }
-
-  return new (P || (P = Promise))(function (resolve, reject) {
-    function fulfilled(value) {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
+        };
+    } catch (e) {
+        alert('The file could not be read. Please make sure that it still exists.');
+        return;
     }
-
-    function rejected(value) {
-      try {
-        step(generator["throw"](value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-
-    function step(result) {
-      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-    }
-
-    step((generator = generator.apply(thisArg, _arguments || [])).next());
-  });
 };
-
-var __generator = this && this.__generator || function (thisArg, body) {
-  var _ = {
-    label: 0,
-    sent: function sent() {
-      if (t[0] & 1) throw t[1];
-      return t[1];
-    },
-    trys: [],
-    ops: []
-  },
-      f,
-      y,
-      t,
-      g;
-  return g = {
-    next: verb(0),
-    "throw": verb(1),
-    "return": verb(2)
-  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
-    return this;
-  }), g;
-
-  function verb(n) {
-    return function (v) {
-      return step([n, v]);
-    };
-  }
-
-  function step(op) {
-    if (f) throw new TypeError("Generator is already executing.");
-
-    while (_) {
-      try {
-        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-        if (y = 0, t) op = [op[0] & 2, t.value];
-
-        switch (op[0]) {
-          case 0:
-          case 1:
-            t = op;
-            break;
-
-          case 4:
-            _.label++;
-            return {
-              value: op[1],
-              done: false
-            };
-
-          case 5:
-            _.label++;
-            y = op[1];
-            op = [0];
-            continue;
-
-          case 7:
-            op = _.ops.pop();
-
-            _.trys.pop();
-
-            continue;
-
-          default:
-            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-              _ = 0;
-              continue;
-            }
-
-            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-              _.label = op[1];
-              break;
-            }
-
-            if (op[0] === 6 && _.label < t[1]) {
-              _.label = t[1];
-              t = op;
-              break;
-            }
-
-            if (t && _.label < t[2]) {
-              _.label = t[2];
-
-              _.ops.push(op);
-
-              break;
-            }
-
-            if (t[2]) _.ops.pop();
-
-            _.trys.pop();
-
-            continue;
-        }
-
-        op = body.call(thisArg, _);
-      } catch (e) {
-        op = [6, e];
-        y = 0;
-      } finally {
-        f = t = 0;
-      }
-    }
-
-    if (op[0] & 5) throw op[1];
-    return {
-      value: op[0] ? op[1] : void 0,
-      done: true
-    };
-  }
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.focusCallback = exports.rightClickCallback = void 0;
-
-var filesystem_1 = require("./filesystem"); // Helpers
-
-
-var updateBlock = function updateBlock(uid, string) {
-  return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          //@ts-ignore
-          return [4
-          /*yield*/
-          , window.roamAlphaAPI.updateBlock({
-            block: {
-              uid: uid,
-              string: string
-            }
-          })];
-
-        case 1:
-          //@ts-ignore
-          _a.sent();
-
-          return [2
-          /*return*/
-          ];
-      }
-    });
-  });
-};
-
-var readBlock = function readBlock(uid) {
-  return __awaiter(void 0, void 0, void 0, function () {
-    var results;
-    return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          return [4
-          /*yield*/
-          , window.roamAlphaAPI.q("[:find\n    (pull ?block [:block/string])\n    :where [?block :block/uid \"" + uid + "\"]]")];
-
-        case 1:
-          results = _a.sent();
-
-          if (results && results.length !== 0) {
-            return [2
-            /*return*/
-            , results[0][0].string];
-          } else return [2
-          /*return*/
-          , ""];
-
-          return [2
-          /*return*/
-          ];
-      }
-    });
-  });
-};
-
-var getUid = function getUid(target) {
-  return target.closest(".roam-block").id.slice(-9);
-};
-
-var replaceCodeblockContent = function replaceCodeblockContent(orig, content) {
-  return orig.replace(/(?<=```)([0-9A-Z_a-z]+)[\s\S]*(?=```)/gm, "$1\n" + content);
-};
-
-var rightClickCallback = function rightClickCallback(e, syncs) {
-  return __awaiter(void 0, void 0, void 0, function () {
-    var uid, orig, file;
-    return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          e.preventDefault();
-          if (!e.target.classList.contains("CodeMirror-gutter-elt")) return [3
-          /*break*/
-          , 3];
-          uid = getUid(e.target);
-          return [4
-          /*yield*/
-          , readBlock(uid)];
-
-        case 1:
-          orig = _a.sent();
-          return [4
-          /*yield*/
-          , filesystem_1.openFileFromSystem()];
-
-        case 2:
-          file = _a.sent(); //@ts-ignore
-
-          syncs.push({
-            uid: uid,
-            orig: orig,
-            file: file
-          });
-          _a.label = 3;
-
-        case 3:
-          return [2
-          /*return*/
-          ];
-      }
-    });
-  });
-};
-
-exports.rightClickCallback = rightClickCallback;
-
-var focusCallback = function focusCallback(syncs) {
-  return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-      switch (_a.label) {
-        case 0:
-          console.log("focus");
-          return [4
-          /*yield*/
-          , Promise.all(syncs.map(function (sync) {
-            return __awaiter(void 0, void 0, void 0, function () {
-              var content;
-              return __generator(this, function (_a) {
-                switch (_a.label) {
-                  case 0:
-                    return [4
-                    /*yield*/
-                    , filesystem_1.readFile(sync.file)];
-
-                  case 1:
-                    content = _a.sent();
-                    return [2
-                    /*return*/
-                    , {
-                      uid: sync.uid,
-                      content: replaceCodeblockContent(sync.orig, content)
-                    }];
+const saveFileToSystem = async (toSave)=>{
+    let handle = toSave.handle;
+    if (!handle) // if no handle exists it must be a new file. So we create a new handle
+    // @ts-ignore
+    handle = await window.showSaveFilePicker({
+        types: [
+            {
+                description: 'Markdown Files',
+                accept: {
+                    'text/markdown': [
+                        '.md'
+                    ]
                 }
-              });
-            });
-          }))];
-
-        case 1:
-          syncs = _a.sent();
-          syncs.forEach(function (sync) {
-            console.log("Updating block: " + sync.uid + " with " + sync.content);
-            updateBlock(sync.uid, sync.content);
-          });
-          return [2
-          /*return*/
-          ];
-      }
+            }, 
+        ]
     });
-  });
+    const writable = await handle.createWritable();
+    await writable.write(toSave.content);
+    const file = await handle.getFile();
+    await writable.close();
+    return {
+        title: file.name,
+        savedContent: toSave.content,
+        handle
+    };
+};
+async function verifyPermission(fileHandle, withWrite) {
+    const opts = withWrite ? {
+        writable: true,
+        mode: 'readwrite'
+    } : {
+    };
+    const permission = await fileHandle.queryPermission(opts);
+    if (permission === 'granted') return true;
+    const request = await fileHandle.requestPermission(opts);
+    return request === 'granted';
+}
+const readFile = async (file)=>{
+    const newfile = await file.handle.getFile();
+    return await newfile.text();
 };
 
-exports.focusCallback = focusCallback;
-},{"./filesystem":"filesystem.ts"}],"index.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-}); //@ts-nocheck
-
-var ui_1 = require("./ui"); // Adding god object
-
-
-window.roamfs = {};
-window.roamfs.syncs = []; // Adding right click listenter
-
-document.addEventListener("contextmenu", function (e) {
-  ui_1.rightClickCallback(e, window.roamfs.syncs);
-}); // Adding focus listentrk
-
-window.addEventListener("focus", function () {
-  ui_1.focusCallback(window.roamfs.syncs);
-});
-},{"./ui":"ui.ts"}],"../../.nvm/versions/node/v12.16.1/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
-var global = arguments[3];
-var OVERLAY_ID = '__parcel__error__overlay__';
-var OldModule = module.bundle.Module;
-
-function Module(moduleName) {
-  OldModule.call(this, moduleName);
-  this.hot = {
-    data: module.bundle.hotData,
-    _acceptCallbacks: [],
-    _disposeCallbacks: [],
-    accept: function (fn) {
-      this._acceptCallbacks.push(fn || function () {});
-    },
-    dispose: function (fn) {
-      this._disposeCallbacks.push(fn);
-    }
-  };
-  module.bundle.hotData = null;
-}
-
-module.bundle.Module = Module;
-var checkedAssets, assetsToAccept;
-var parent = module.bundle.parent;
-
-if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
-  var hostname = "" || location.hostname;
-  var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61262" + '/');
-
-  ws.onmessage = function (event) {
-    checkedAssets = {};
-    assetsToAccept = [];
-    var data = JSON.parse(event.data);
-
-    if (data.type === 'update') {
-      var handled = false;
-      data.assets.forEach(function (asset) {
-        if (!asset.isNew) {
-          var didAccept = hmrAcceptCheck(global.parcelRequire, asset.id);
-
-          if (didAccept) {
-            handled = true;
-          }
-        }
-      }); // Enable HMR for CSS by default.
-
-      handled = handled || data.assets.every(function (asset) {
-        return asset.type === 'css' && asset.generated.js;
-      });
-
-      if (handled) {
-        console.clear();
-        data.assets.forEach(function (asset) {
-          hmrApply(global.parcelRequire, asset);
-        });
-        assetsToAccept.forEach(function (v) {
-          hmrAcceptRun(v[0], v[1]);
-        });
-      } else if (location.reload) {
-        // `location` global exists in a web worker context but lacks `.reload()` function.
-        location.reload();
-      }
-    }
-
-    if (data.type === 'reload') {
-      ws.close();
-
-      ws.onclose = function () {
-        location.reload();
-      };
-    }
-
-    if (data.type === 'error-resolved') {
-      console.log('[parcel] ✨ Error resolved');
-      removeErrorOverlay();
-    }
-
-    if (data.type === 'error') {
-      console.error('[parcel] 🚨  ' + data.error.message + '\n' + data.error.stack);
-      removeErrorOverlay();
-      var overlay = createErrorOverlay(data);
-      document.body.appendChild(overlay);
-    }
-  };
-}
-
-function removeErrorOverlay() {
-  var overlay = document.getElementById(OVERLAY_ID);
-
-  if (overlay) {
-    overlay.remove();
-  }
-}
-
-function createErrorOverlay(data) {
-  var overlay = document.createElement('div');
-  overlay.id = OVERLAY_ID; // html encode message and stack trace
-
-  var message = document.createElement('div');
-  var stackTrace = document.createElement('pre');
-  message.innerText = data.error.message;
-  stackTrace.innerText = data.error.stack;
-  overlay.innerHTML = '<div style="background: black; font-size: 16px; color: white; position: fixed; height: 100%; width: 100%; top: 0px; left: 0px; padding: 30px; opacity: 0.85; font-family: Menlo, Consolas, monospace; z-index: 9999;">' + '<span style="background: red; padding: 2px 4px; border-radius: 2px;">ERROR</span>' + '<span style="top: 2px; margin-left: 5px; position: relative;">🚨</span>' + '<div style="font-size: 18px; font-weight: bold; margin-top: 20px;">' + message.innerHTML + '</div>' + '<pre>' + stackTrace.innerHTML + '</pre>' + '</div>';
-  return overlay;
-}
-
-function getParents(bundle, id) {
-  var modules = bundle.modules;
-
-  if (!modules) {
-    return [];
-  }
-
-  var parents = [];
-  var k, d, dep;
-
-  for (k in modules) {
-    for (d in modules[k][1]) {
-      dep = modules[k][1][d];
-
-      if (dep === id || Array.isArray(dep) && dep[dep.length - 1] === id) {
-        parents.push(k);
-      }
-    }
-  }
-
-  if (bundle.parent) {
-    parents = parents.concat(getParents(bundle.parent, id));
-  }
-
-  return parents;
-}
-
-function hmrApply(bundle, asset) {
-  var modules = bundle.modules;
-
-  if (!modules) {
-    return;
-  }
-
-  if (modules[asset.id] || !bundle.parent) {
-    var fn = new Function('require', 'module', 'exports', asset.generated.js);
-    asset.isNew = !modules[asset.id];
-    modules[asset.id] = [fn, asset.deps];
-  } else if (bundle.parent) {
-    hmrApply(bundle.parent, asset);
-  }
-}
-
-function hmrAcceptCheck(bundle, id) {
-  var modules = bundle.modules;
-
-  if (!modules) {
-    return;
-  }
-
-  if (!modules[id] && bundle.parent) {
-    return hmrAcceptCheck(bundle.parent, id);
-  }
-
-  if (checkedAssets[id]) {
-    return;
-  }
-
-  checkedAssets[id] = true;
-  var cached = bundle.cache[id];
-  assetsToAccept.push([bundle, id]);
-
-  if (cached && cached.hot && cached.hot._acceptCallbacks.length) {
-    return true;
-  }
-
-  return getParents(global.parcelRequire, id).some(function (id) {
-    return hmrAcceptCheck(global.parcelRequire, id);
-  });
-}
-
-function hmrAcceptRun(bundle, id) {
-  var cached = bundle.cache[id];
-  bundle.hotData = {};
-
-  if (cached) {
-    cached.hot.data = bundle.hotData;
-  }
-
-  if (cached && cached.hot && cached.hot._disposeCallbacks.length) {
-    cached.hot._disposeCallbacks.forEach(function (cb) {
-      cb(bundle.hotData);
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"JacNc":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
     });
-  }
-
-  delete bundle.cache[id];
-  bundle(id);
-  cached = bundle.cache[id];
-
-  if (cached && cached.hot && cached.hot._acceptCallbacks.length) {
-    cached.hot._acceptCallbacks.forEach(function (cb) {
-      cb();
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule') return;
+        // Skip duplicate re-exports when they have the same value.
+        if (key in dest && dest[key] === source[key]) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
     });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
-    return true;
-  }
-}
-},{}]},{},["../../.nvm/versions/node/v12.16.1/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.ts"], null)
-//# sourceMappingURL=/index.js.map
+},{}]},["8uBhv","4aleK"], "4aleK", "parcelRequire4f62")
+
+//# sourceMappingURL=index.js.map
