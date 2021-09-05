@@ -5,7 +5,8 @@
   "author": "Adam Krivka",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel serve src/index.ts"
+    "dev": "parcel serve src/index.ts",
+    "build": "parcel build src/index.ts"
   },
   "devDependencies": {
     "@types/store": "^2.0.2",
