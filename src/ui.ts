@@ -22,7 +22,8 @@ const readBlock = async (uid) => {
 }
 
 const replaceCodeblockContent = (orig, content) => {
-    return orig.replace(/(?<=```)(\w+).*(?=```)/gms, "$1\n" + content)
+    let lang = orig.match(/^```(\w+)/m)[1];
+    return "```" + lang + "\n" + content + "\n```";
 }
 
 export const connectToFile = async (e, syncs) => {
